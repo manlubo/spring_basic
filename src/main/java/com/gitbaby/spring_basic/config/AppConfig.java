@@ -18,14 +18,14 @@ public class AppConfig {
 //    return new Member("Summer", 20);
 //  }
 
-  @Bean
-  @ConfigurationProperties("spring.datasource.hikari")
-  public HikariConfig hikariConfig() {
-    return new HikariConfig();
-  }
-
-  @Bean
-  public HikariDataSource hikariDataSource() {
-    return new HikariDataSource(hikariConfig());
-  }
+//  @Bean
+//  @ConfigurationProperties("spring.datasource.hikari")
+//  public HikariConfig hikariConfig() {
+//    return new HikariConfig();
+//  }
+//
+//  @Bean
+//  public HikariDataSource hikariDataSource() {
+//    return new HikariDataSource(hikariConfig());
+//  }
 }

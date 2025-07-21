@@ -1,27 +1,29 @@
 package com.gitbaby.spring_basic.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
-//@Component
+import java.util.List;
+
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "tbl_member")
+@Setter
+@Getter
+@ToString(exclude = "boards")
 public class Member {
-//  @Value("Winter")
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long no;
+
   private String name;
-//  @Value("32")
-  private int age;
   private String id;
+  private String pw;
+  private int age;
 
-  public Member(String name, int age) {
-    this.name = name;
-    this.age = age;
-  }
-
+  @OneToMany(mappedBy = "member")
+  List<Board> boards;
 }

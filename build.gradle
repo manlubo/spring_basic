@@ -1,5 +1,6 @@
 plugins {
   id 'java'
+  id 'war'
   id 'org.springframework.boot' version '3.5.3'
   id 'io.spring.dependency-management' version '1.1.7'
 }
@@ -25,20 +26,29 @@ repositories {
 
 dependencies {
   implementation 'org.springframework.boot:spring-boot-starter'
+  implementation 'org.springframework.boot:spring-boot-starter-web:3.5.3'
+
   implementation 'org.projectlombok:lombok'
   developmentOnly 'org.springframework.boot:spring-boot-devtools'
   annotationProcessor 'org.projectlombok:lombok'
   testAnnotationProcessor 'org.projectlombok:lombok'
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
   testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
   runtimeOnly 'org.aspectj:aspectjweaver:1.9.24'
   runtimeOnly 'org.aspectj:aspectjrt:1.9.24'
   implementation 'org.springframework:spring-aspects:6.2.8'
 
   implementation 'org.springframework.boot:spring-boot-starter-jdbc:3.4.7'
   implementation 'org.mariadb.jdbc:mariadb-java-client'
+  implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.5.3'
+
 }
 
 tasks.named('test') {
   useJUnitPlatform()
+}
+
+tasks.withType(JavaExec).configureEach {
+  jvmArgs = "-Dfile.encoding=UTF-8"
 }
