@@ -1,5 +1,6 @@
 package com.gitbaby.spring_basic.repository;
 
+import com.gitbaby.spring_basic.domain.dto.MemoDto;
 import com.gitbaby.spring_basic.entity.Memo;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -166,6 +168,25 @@ public class MemoRepositoryTest {
     List<Memo> memos = memoRepository.getListDesc2();
     memos.forEach(m -> log.info("{}", m));
   }
+  @Test
+  @DisplayName("JPQL 테스트3")
+  public void testPageJpql3() {
+    int result = memoRepository.updateMemoText(7L, "수정되었습니다1.");
+    log.info("result: {}", result);
+  }
+
+  @Test
+  @DisplayName("JPQL 테스트4")
+  public void testPageJpql4() {
+   int result = memoRepository.updateMemoText2(Memo.builder().mno(7L).memoText("수정되었습니다2.").build());
+   log.info("result: {}", result);
+  }
+  @Test
+  @DisplayName("JPQL 테스트5")
+  public void testPageJpql5() {
+   int result = memoRepository.updateMemoText3(7L, "수정되었습니다3.");
+   log.info("result: {}", result);
+  }
 
   @Test
   @DisplayName("페이지 정렬 테스트")
@@ -177,5 +198,24 @@ public class MemoRepositoryTest {
 
     // EAGER, LAZY
   }
+
+  @Test
+  @DisplayName("JPQL 페이징 쿼리 테스트 1")
+  public void testListWithQueryObject() {
+    Page<Object []> objects = memoRepository.getListWithQueryObject(0L, PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "mno")));
+    objects.forEach(r -> {
+      for (Object o : r){
+        log.info("{}", o);
+      }
+    });
+  }
+
+  @Test
+  @DisplayName("JPQL 페이징 쿼리 테스트 2")
+  public void testListWithQueryProjection() {
+    Page<MemoDto> memoDtos = memoRepository.getListWithQueryProjection(0L, PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "mno")));
+    memoDtos.forEach(m -> log.info("mno {} :: memoText {} :: n {}", m.getMno(), m.getMemoText(), m.getN()));
+  }
+
 
 }
