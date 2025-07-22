@@ -35,3 +35,17 @@
 
 - ORM vs MyBatis vs QueryDSL 비교  
   → SQL 자동화 정도, 쿼리 유연성, 실무 적용 상황별 장단점 비교
+
+
+## 2025.07.22
+- JPA 트랜잭션과 롤백 관계 정리 (@Transactional, @Commit, @Rollback)
+- 영속성 개념과 상태 흐름 (비영속 → 영속 → 준영속 → 삭제)
+- Entity vs DTO 차이 및 사용 위치 정리
+- PageRequest로 페이징 및 정렬 처리 방법 확인
+- JPQL 문법과 SQL과의 차이 비유로 정리
+- EAGER vs LAZY 로딩 방식 비교 (기본 전략과 실무 팁)
+- MyBatis의 <association>, <collection> 사용법 정리
+- @Modifying + @Query로 JPQL 업데이트 쿼리 작성
+- Page<Object[]> / Page<DTO> 형태 조회 쿼리 예제 확인
+- 타임리프 기본 개념, th:block, fragment 사용법 정리
+
