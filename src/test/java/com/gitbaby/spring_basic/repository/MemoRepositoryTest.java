@@ -3,9 +3,13 @@ package com.gitbaby.spring_basic.repository;
 import com.gitbaby.spring_basic.entity.Memo;
 import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,27 +62,120 @@ public class MemoRepositoryTest {
 
 
   @Test
+  @DisplayName("등록 테스트")
   public void testInsert(){
-    Memo memo = Memo.builder().memoText("하이하이").build();
-    memoRepository.save(memo);
+
+    for(int i = 1; i <= 100; i++){
+      memoRepository.save(Memo.builder().memoText(i + "번 메모입니다.").build());
+    }
   }
 
+
   @Test
+  @DisplayName("단일 선택 테스트")
   public void testFindById(){
-    Memo memo = memoRepository.findById(4L).orElseThrow(() -> new RuntimeException("존재하지 않는 메모 번호입니다."));
+    Memo memo = memoRepository.findById(7L).orElseThrow(() -> new RuntimeException("존재하지 않는 메모 번호입니다."));
     log.info("{}", memo);
   }
 
   @Test
+  @DisplayName("리스트 테스트")
   public void testFindAll() {
     memoRepository.findAll().forEach(m -> log.info("{}", m));
   }
 
   @Test
   @Transactional
+  @Rollback(false)
+  @DisplayName("수정 테스트")
   public void testUpdate(){
-    Memo memo = memoRepository.findById(4L).orElseThrow(() -> new RuntimeException("존재하지 않는 메모입니다."));
+    Memo memo = memoRepository.findById(7L).orElseThrow(() -> new RuntimeException("존재하지 않는 메모입니다."));
     memo.setMemoText("수정되었습니다.");
+  }
+
+  @Test
+  @Rollback(true)
+  @DisplayName("삭제 테스트")
+  public void testDelete(){
+    memoRepository.deleteById(6L);
+  }
+
+  @Test
+  @DisplayName("기본 페이징 처리")
+  public void testPageDefault() {
+    PageRequest pageRequest = PageRequest.of(2, 10);
+    Page<Memo> result = memoRepository.findAll(pageRequest);
+    result.forEach( m -> log.info("{}", m));
+
+  }
+
+  @Test
+  @DisplayName("페이지 내부 항목")
+  public void testPageDefault2() {
+    PageRequest pageRequest = PageRequest.of(0, 10);
+    Page<Memo> result = memoRepository.findAll(pageRequest);
+
+    log.info("전체 개수: {}", result.getTotalElements());
+    log.info("전체 페이지: {}", result.getTotalPages());
+    log.info("현재 페이지 번호: {}", result.getNumber());
+    log.info("페이지당 개수: {}", result.getSize());
+    log.info("다음 페이지 존재여부: {}", result.hasNext());
+    log.info("이전 페이지 존재여부: {}", result.hasPrevious());
+    log.info("첫번째 페이지인지: {}", result.isFirst());
+
+    List<Memo> memos = result.getContent();
+    memos.forEach(m -> log.info("{}", m));
+  }
+
+  @Test
+  @DisplayName("jpa 검색쿼리 테스트1")
+  public void testPageDefault3() {
+    memoRepository.findByMnoBetweenOrderByMnoDesc(70L, 80L).forEach(m -> log.info("{}", m));
+  }
+
+  @Test
+  @DisplayName("jpa 검색쿼리 테스트2")
+  public void testPageDefault4() {
+    Page<Memo> memos = memoRepository.findByMnoBetween(70L, 80L, PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "mno")));
+    memos.forEach(m -> log.info("{}", m));
+  }
+
+  @Test
+  @DisplayName("jpa 검색쿼리 테스트3 - 카운트")
+  public void testPageDefault5() {
+    Long count = memoRepository.count();
+    log.info("count: {}", count);
+  }
+
+  @Test
+  @DisplayName("Mno 지정 이거나 memotext가 특정 문자열일때의 쿼리 메소드!")
+  public void testPageDefault6() {
+    List<Memo> memos = memoRepository.findByMnoOrMemoText(7L,"안녕하세요");
+    memos.forEach(m -> log.info("{}", m));
+  }
+
+  @Test
+  @DisplayName("JPQL 테스트")
+  public void testPageJpql1() {
+    List<Memo> memos = memoRepository.getListDesc();
+    memos.forEach(m -> log.info("{}", m));
+  }
+  @Test
+  @DisplayName("JPQL 테스트2")
+  public void testPageJpql2() {
+    List<Memo> memos = memoRepository.getListDesc2();
+    memos.forEach(m -> log.info("{}", m));
+  }
+
+  @Test
+  @DisplayName("페이지 정렬 테스트")
+  public void testPageSort(){
+    Sort sort = Sort.by(Sort.Direction.DESC, "mno");
+    PageRequest pageRequest = PageRequest.of(0, 5, sort);
+    Page<Memo> result = memoRepository.findAll(pageRequest);
+    result.forEach( m -> log.info("{}", m));
+
+    // EAGER, LAZY
   }
 
 }
