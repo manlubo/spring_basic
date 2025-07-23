@@ -49,3 +49,16 @@
 - Page<Object[]> / Page<DTO> 형태 조회 쿼리 예제 확인
 - 타임리프 기본 개념, th:block, fragment 사용법 정리
 
+## 2025.07.23
+
+#### 🔹 타임리프 레이아웃 및 fragment 활용 학습
+- `th:fragment`, `th:replace`, `~{this::fragmentName}` 문법 이해
+- 단일 fragment → 다중 fragment(layout) 확장 구성 방식 연습
+- 레이아웃 템플릿(`setContent`, `layout`)에 여러 영역(header, sidebar, content, footer) 동적 삽입 방식 테스트
+- 실제 사용 예시로 `layout.html`과 `page.html` 구조 설계 및 적용
+
+#### 📚 주요 개념 정리
+- `th:fragment="fragmentName(param1, param2)"`: 외부에서 파라미터를 받는 fragment 정의
+- `th:replace="~{/template :: fragmentName(...)}"`: 외부 fragment를 현재 위치에 삽입
+- `~{this::fragmentName}`: 현재 파일 내 정의된 fragment 참조
+

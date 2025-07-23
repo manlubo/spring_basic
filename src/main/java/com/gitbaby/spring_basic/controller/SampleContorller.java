@@ -51,8 +51,8 @@ public class SampleContorller {
   @GetMapping("ex3")
   public void ex3() {}
 
-  @GetMapping("exLayout1")
-  public void exLayout1() {
+  @GetMapping({"exLayout1", "exLayout2", "exTemplate", "exSidebar"})
+  public void exLayout1(Model model) {
     log.info("exLayout1.........");
   }
 }
